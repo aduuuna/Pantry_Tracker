@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
-import { firestore } from "../firebase";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { firestore, analytics } from "../firebase";
 import {
   Box,
   Typography,
@@ -33,7 +33,7 @@ export default function Home() {
   const inventoryListRef = useRef(null);
   const [highlightedItem, setHighlightedItem] = useState(null);
 
-  const updateInventory = async () => {
+  const updateInventory = useCallback(async () => {
     const snapshot = query(collection(firestore, "inventory"));
     const docs = await getDocs(snapshot);
     const inventoryList = [];
@@ -51,7 +51,7 @@ export default function Home() {
     }
 
     setInventory(inventoryList);
-  };
+  }, [sortAlphabetically]);
 
   const toggleSortMethod = () => {
     setSortAlphabetically(!sortAlphabetically);
@@ -91,7 +91,7 @@ export default function Home() {
 
   useEffect(() => {
     updateInventory();
-  }, []);
+  }, [updateInventory]);
 
   const handleOpen = () => {
     setOpen(true);
