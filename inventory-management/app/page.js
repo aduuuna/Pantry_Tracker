@@ -26,6 +26,10 @@ export default function Home() {
   const [itemName, setItemName] = useState("");
   const [itemQuantity, setItemQuantity] = useState(1);
   const [sortAlphabetically, setSortAlphabetically] = useState(true);
+  const [openSearch, setOpenSearch] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResult, setSearchResult] = useState(null);
+  const [openNoResult, setOpenNoResult] = useState(false);
 
   const updateInventory = async () => {
     const snapshot = query(collection(firestore, "inventory"));
@@ -95,6 +99,35 @@ export default function Home() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleOpenSearch = () => {
+    setOpenSearch(true);
+    setSearchTerm("");
+  };
+
+  const handleCloseSearch = () => {
+    setOpenSearch(false);
+    setSearchTerm("");
+    setSearchResult(null);
+  };
+
+  const handleSearch = () => {
+    const result = inventory.find(
+      (item) => item.name.toLowerCase() === searchTerm.toLowerCase()
+    );
+    if (result) {
+      setSearchResult(result);
+      setOpenSearch(false);
+
+      const newInventory = [
+        result,
+        ...inventory.filter((item) => item.name !== result.name),
+      ];
+      setInventory(newInventory);
+    } else {
+      setOpenNoResult(true);
+    }
+  };
   return (
     <Box
       width="100vw"
@@ -154,6 +187,62 @@ export default function Home() {
           </Button>
         </Box>
       </Modal>
+      <Modal open={openSearch} onClose={handleCloseSearch}>
+        <Box
+          position="absolute"
+          top="50%"
+          left="50%"
+          width={400}
+          bgcolor="white"
+          border="2px soloid #000000"
+          boxShadow={24}
+          p={4}
+          display="flex"
+          flexDirection="column"
+          gap={3}
+          sx={{
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <Typography variant="h6">What item are you looking for?</Typography>
+          <Stack with="100%" direction="row" spacing={2}>
+            <TextField
+              variant="outlined"
+              fullWidth
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </Stack>
+
+          <Button variant="contained" onClick={handleSearch}>
+            Search Item
+          </Button>
+        </Box>
+      </Modal>
+
+      <Modal open={openNoResult} onClose={() => setOpenNoResult(false)}>
+        <Box
+          position="absolute"
+          top="50%"
+          left="50%"
+          width={400}
+          bgcolor="white"
+          border="2px solid #000000"
+          boxShadow={24}
+          p={4}
+          display="flex"
+          flexDirection="column"
+          gap={3}
+          sx={{
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <Typography variant="h6">Item not found in inventory</Typography>
+          <Button variant="contained" onClick={() => setOpenNoResult(false)}>
+            OK
+          </Button>
+        </Box>
+      </Modal>
       <Box
         display="flex"
         flexDirection="row"
@@ -190,7 +279,7 @@ export default function Home() {
           <Button
             variant="contained"
             onClick={() => {
-              handleOpen();
+              handleOpenSearch();
             }}
           >
             Search
@@ -217,7 +306,11 @@ export default function Home() {
               key={name}
               width="100%"
               border="1px solid grey"
-              bgcolor="#e1f0f5"
+              bgcolor={
+                searchResult && searchResult.name === name
+                  ? "#FFB6C1"
+                  : "#e1f0f5"
+              }
               alignItems="center"
               justifyContent="space-evenly"
               flexDirection="row"
