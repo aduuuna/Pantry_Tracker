@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { firestore } from "../firebase";
 import {
   Box,
@@ -30,6 +30,8 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResult, setSearchResult] = useState(null);
   const [openNoResult, setOpenNoResult] = useState(false);
+  const inventoryListRef = useRef(null);
+  const [highlightedItem, setHighlightedItem] = useState(null);
 
   const updateInventory = async () => {
     const snapshot = query(collection(firestore, "inventory"));
@@ -47,6 +49,12 @@ export default function Home() {
     } else {
       inventoryList.sort((a, b) => b.quantity - a.quantity);
     }
+
+    setTimeout(() => {
+      if (inventoryListRef.current) {
+        inventoryListRef.current.scrollTop = 0;
+      }
+    }, 100);
 
     setInventory(inventoryList);
   };
@@ -118,12 +126,23 @@ export default function Home() {
     if (result) {
       setSearchResult(result);
       setOpenSearch(false);
+      setHighlightedItem(result.name); // set search result
 
       const newInventory = [
         result,
         ...inventory.filter((item) => item.name !== result.name),
       ];
       setInventory(newInventory);
+
+      setTimeout(() => {
+        if (inventoryListRef.current) {
+          inventoryListRef.current.scrollTop = 0;
+        }
+      }, 100);
+
+      setTimeout(() => {
+        setHighlightedItem(null);
+      }, 3000);
     } else {
       setOpenNoResult(true);
     }
@@ -300,47 +319,49 @@ export default function Home() {
           </Typography>
         </Box>
 
-        <Stack width="100%" height="300px" spacing={2} overflow="auto">
+        <Stack
+          width="100%"
+          height="300px"
+          spacing={1}
+          overflow="auto"
+          ref={inventoryListRef}
+        >
           {inventory.map(({ name, quantity }) => (
             <Box
               key={name}
               width="100%"
-              border="1px solid grey"
-              bgcolor={
-                searchResult && searchResult.name === name
-                  ? "#FFB6C1"
-                  : "#e1f0f5"
-              }
+              height="80px"
+              bgcolor={highlightedItem === name ? "#FFB6C1" : "#e1f0f5"}
               alignItems="center"
-              justifyContent="space-evenly"
+              justifyContent="space-between"
               flexDirection="row"
               display="flex"
               padding={4}
             >
               <Stack
-                width="40%"
+                width="50%"
                 justifyContent="center"
                 alignItems="left"
                 display="flex"
               >
-                <Typography variant="h3" color="#333" textAlign="left">
+                <Typography variant="h5" color="#333" textAlign="left">
                   {name.charAt(0).toUpperCase() + name.slice(1)}
                 </Typography>
               </Stack>
               <Stack
-                width="20%"
+                width="15%"
                 justifyContent="center"
                 alignItems="center"
                 display="flex"
               >
-                <Typography variant="h3" color="#333" textAlign="center">
+                <Typography variant="h5" color="#333" textAlign="center">
                   {quantity}
                 </Typography>
               </Stack>
               <Stack
                 direction="row"
                 spacing={2}
-                width="30%"
+                width="25%"
                 alignItems="center"
                 justifyContent="space-evenly"
                 display="flex"
