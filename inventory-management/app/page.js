@@ -56,15 +56,15 @@ export default function Home() {
     await updateInventory();
   };
 
-  const addItem = async (item) => {
+  const addItem = async (item, quantity) => {
     const docRef = doc(collection(firestore, "inventory"), item);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-      const { quantity } = docSnap.data();
-      await setDoc(docRef, { quantity: quantity + 1 });
+      const { quantity: existingQuantity } = docSnap.data();
+      await setDoc(docRef, { quantity: existingQuantity + quantity });
     } else {
-      await setDoc(docRef, { quantity: 1 });
+      await setDoc(docRef, { quantity: quantity });
     }
 
     await updateInventory();
@@ -76,6 +76,7 @@ export default function Home() {
 
   const handleOpen = () => {
     setOpen(true);
+    setItemQuantity(1);
   };
 
   const handleClose = () => {
@@ -122,15 +123,17 @@ export default function Home() {
             <TextField
               variant="outlined"
               fullWidth
-              value={quantity}
-              onChange={(e) => setItemName(e.target.value)}
+              type="number"
+              value={itemQuantity}
+              onChange={(e) => setItemQuantity(parseInt(e.target.value) || 1)}
             />
           </Stack>
           <Button
             variant="contained"
             onClick={() => {
-              addItem(itemName);
+              addItem(itemName, itemQuantity);
               setItemName("");
+              setItemQuantity(1);
               handleClose();
             }}
           >
@@ -201,7 +204,7 @@ export default function Home() {
                 justifyContent="space-evenly"
                 display="flex"
               >
-                <Button variant="contained" onClick={() => addItem(name)}>
+                <Button variant="contained" onClick={() => addItem(name, 1)}>
                   Add
                 </Button>
                 <Button variant="contained" onClick={() => removeItem(name)}>
