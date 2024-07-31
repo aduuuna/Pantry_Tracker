@@ -24,6 +24,7 @@ export default function Home() {
   const [inventory, setInventory] = useState([]);
   const [open, setOpen] = useState(false);
   const [itemName, setItemName] = useState("");
+  const [itemQuantity, setItemQuantity] = useState(1);
 
   const updateInventory = async () => {
     const snapshot = query(collection(firestore, "inventory"));
@@ -107,12 +108,21 @@ export default function Home() {
             transform: "translate(-50%, -50%)",
           }}
         >
-          <Typography variant="h6">Add Item</Typography>
+          <Typography variant="h6">Item Name</Typography>
           <Stack with="100%" direction="row" spacing={2}>
             <TextField
               variant="outlined"
               fullWidth
               value={itemName}
+              onChange={(e) => setItemName(e.target.value)}
+            />
+          </Stack>
+          <Typography variant="h6">Quantity</Typography>
+          <Stack with="100%" direction="row" spacing={2}>
+            <TextField
+              variant="outlined"
+              fullWidth
+              value={quantity}
               onChange={(e) => setItemName(e.target.value)}
             />
           </Stack>
@@ -136,9 +146,9 @@ export default function Home() {
       >
         Add new Item
       </Button>
-      <Box border="1px solid black">
+      <Box border="1px solid black" width="800px" height="400px">
         <Box
-          width="800px"
+          width="100%"
           height="100px"
           bgcolor="#ADD8e6"
           alignItems="center"
@@ -149,21 +159,59 @@ export default function Home() {
             Inventory Items
           </Typography>
         </Box>
+
+        <Stack width="100%" height="300px" spacing={2} overflow="auto">
+          {inventory.map(({ name, quantity }) => (
+            <Box
+              key={name}
+              width="100%"
+              border="1px solid grey"
+              bgcolor="#e1f0f5"
+              alignItems="center"
+              justifyContent="space-evenly"
+              flexDirection="row"
+              display="flex"
+              padding={4}
+            >
+              <Stack
+                width="40%"
+                justifyContent="center"
+                alignItems="left"
+                display="flex"
+              >
+                <Typography variant="h3" color="#333" textAlign="left">
+                  {name.charAt(0).toUpperCase() + name.slice(1)}
+                </Typography>
+              </Stack>
+              <Stack
+                width="20%"
+                justifyContent="center"
+                alignItems="center"
+                display="flex"
+              >
+                <Typography variant="h3" color="#333" textAlign="center">
+                  {quantity}
+                </Typography>
+              </Stack>
+              <Stack
+                direction="row"
+                spacing={2}
+                width="30%"
+                alignItems="center"
+                justifyContent="space-evenly"
+                display="flex"
+              >
+                <Button variant="contained" onClick={() => addItem(name)}>
+                  Add
+                </Button>
+                <Button variant="contained" onClick={() => removeItem(name)}>
+                  Remove
+                </Button>
+              </Stack>
+            </Box>
+          ))}
+        </Stack>
       </Box>
-      <Stack width="800px" height="200px" spacing={2} overflow="auto">
-        {inventory.map(({ name, quantity }) => {
-          <Box
-            key={name}
-            width="100%"
-            alignItems="center"
-            justifyContent="center"
-            display="flex"
-            padding={5}
-          >
-            <Typography>{name}</Typography>
-          </Box>;
-        })}
-      </Stack>
     </Box>
   );
 }
