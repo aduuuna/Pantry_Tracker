@@ -50,12 +50,6 @@ export default function Home() {
       inventoryList.sort((a, b) => b.quantity - a.quantity);
     }
 
-    setTimeout(() => {
-      if (inventoryListRef.current) {
-        inventoryListRef.current.scrollTop = 0;
-      }
-    }, 100);
-
     setInventory(inventoryList);
   };
 
@@ -265,7 +259,9 @@ export default function Home() {
       <Box
         display="flex"
         flexDirection="row"
-        width="700px"
+        maxWidth="700px"
+        minWidth="400px"
+        width="100%"
         height="100px"
         justifyContent="space-between"
       >
@@ -273,7 +269,7 @@ export default function Home() {
           alignItems="center"
           display="flex"
           justifyContent="space-evenly"
-          width="250px"
+          width="230px"
           flexDirection="row"
         >
           <Button variant="contained" onClick={toggleSortMethod}>
@@ -305,7 +301,13 @@ export default function Home() {
           </Button>
         </Stack>
       </Box>
-      <Box border="1px solid black" width="700px" height="400px">
+      <Box
+        border="1px solid black"
+        maxWidth="700px"
+        minWidth="400px"
+        width="100%"
+        height="400px"
+      >
         <Box
           width="100%"
           height="100px"
@@ -314,13 +316,15 @@ export default function Home() {
           justifyContent="center"
           display="flex"
         >
-          <Typography variant="h2" color="#333" fontWeight="100">
+          <Typography variant="h4" color="#333" fontWeight="100">
             Inventory Items
           </Typography>
         </Box>
 
         <Stack
           width="100%"
+          maxWidth="700px"
+          minWidth="400px"
           height="300px"
           spacing={1}
           overflow="auto"
@@ -333,13 +337,14 @@ export default function Home() {
               height="80px"
               bgcolor={highlightedItem === name ? "#FFB6C1" : "#e1f0f5"}
               alignItems="center"
-              justifyContent="space-between"
+              justifyContent="space-evenly"
               flexDirection="row"
               display="flex"
-              padding={4}
+              padding={3}
+              border="1px solid grey"
             >
               <Stack
-                width="50%"
+                width="45%"
                 justifyContent="center"
                 alignItems="left"
                 display="flex"
@@ -348,6 +353,7 @@ export default function Home() {
                   {name.charAt(0).toUpperCase() + name.slice(1)}
                 </Typography>
               </Stack>
+
               <Stack
                 width="15%"
                 justifyContent="center"
