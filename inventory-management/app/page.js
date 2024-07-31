@@ -25,6 +25,7 @@ export default function Home() {
   const [open, setOpen] = useState(false);
   const [itemName, setItemName] = useState("");
   const [itemQuantity, setItemQuantity] = useState(1);
+  const [sortAlphabetically, setSortAlphabetically] = useState(true);
 
   const updateInventory = async () => {
     const snapshot = query(collection(firestore, "inventory"));
@@ -36,7 +37,19 @@ export default function Home() {
         ...doc.data(),
       });
     });
+
+    if (sortAlphabetically) {
+      inventoryList.sort((a, b) => a.name.localeCompare(b.name));
+    } else {
+      inventoryList.sort((a, b) => b.quantity - a.quantity);
+    }
+
     setInventory(inventoryList);
+  };
+
+  const toggleSortMethod = () => {
+    setSortAlphabetically(!sortAlphabetically);
+    updateInventory();
   };
 
   const removeItem = async (item) => {
@@ -141,15 +154,50 @@ export default function Home() {
           </Button>
         </Box>
       </Modal>
-      <Button
-        variant="contained"
-        onClick={() => {
-          handleOpen();
-        }}
+      <Box
+        display="flex"
+        flexDirection="row"
+        width="700px"
+        height="100px"
+        justifyContent="space-between"
       >
-        Add new Item
-      </Button>
-      <Box border="1px solid black" width="800px" height="400px">
+        <Stack
+          alignItems="center"
+          display="flex"
+          justifyContent="space-evenly"
+          width="250px"
+          flexDirection="row"
+        >
+          <Button variant="contained" onClick={toggleSortMethod}>
+            Sort {sortAlphabetically ? "by Alphabetically" : "Quantity"}
+          </Button>
+        </Stack>
+        <Stack
+          alignItems="center"
+          display="flex"
+          justifyContent="space-evenly"
+          width="300px"
+          flexDirection="row"
+        >
+          <Button
+            variant="contained"
+            onClick={() => {
+              handleOpen();
+            }}
+          >
+            Add new Item
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              handleOpen();
+            }}
+          >
+            Search
+          </Button>
+        </Stack>
+      </Box>
+      <Box border="1px solid black" width="700px" height="400px">
         <Box
           width="100%"
           height="100px"
