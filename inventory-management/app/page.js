@@ -324,11 +324,11 @@ export default function Home() {
         height="400px"
         sx={{
           width: {
-            xs: "100%", // 0px to 600px
-            sm: "80%", // 600px to 900px
-            md: "70%", // 900px to 1200px
-            lg: "60%", // 1200px to 1536px
-            xl: "50%", // 1536px and up
+            xs: "80%", // 0px to 600px
+            sm: "70%", // 600px to 900px
+            md: "60%", // 900px to 1200px
+            lg: "50%", // 1200px to 1536px
+            xl: "40%", // 1536px and up
           },
         }}
       >
@@ -347,8 +347,6 @@ export default function Home() {
 
         <Stack
           width="100%"
-          maxWidth="700px"
-          minWidth="400px"
           height="300px"
           spacing={1}
           overflow="auto"
