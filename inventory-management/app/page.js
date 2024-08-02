@@ -278,6 +278,15 @@ export default function Home() {
         width="100%"
         height="100px"
         justifyContent="center"
+        sx={{
+          width: {
+            xs: "100%", // 0px to 600px
+            sm: "80%", // 600px to 900px
+            md: "70%", // 900px to 1200px
+            lg: "60%", // 1200px to 1536px
+            xl: "50%", // 1536px and up
+          },
+        }}
       >
         <Stack
           alignItems="center"
@@ -313,6 +322,15 @@ export default function Home() {
         minWidth="400px"
         width="100%"
         height="400px"
+        sx={{
+          width: {
+            xs: "100%", // 0px to 600px
+            sm: "80%", // 600px to 900px
+            md: "70%", // 900px to 1200px
+            lg: "60%", // 1200px to 1536px
+            xl: "50%", // 1536px and up
+          },
+        }}
       >
         <Box
           width="100%"
@@ -343,7 +361,7 @@ export default function Home() {
               height="80px"
               bgcolor={highlightedItem === name ? "#FFB6C1" : "#e1f0f5"}
               alignItems="center"
-              justifyContent="space-evenly"
+              justifyContent="space-between"
               flexDirection="row"
               display="flex"
               padding={3}
@@ -361,7 +379,7 @@ export default function Home() {
               </Stack>
 
               <Stack
-                width="15%"
+                width="10%"
                 justifyContent="center"
                 alignItems="center"
                 display="flex"
@@ -373,7 +391,7 @@ export default function Home() {
               <Stack
                 direction="row"
                 spacing={2}
-                width="35%"
+                width="40%"
                 alignItems="center"
                 justifyContent="space-evenly"
                 display="flex"
