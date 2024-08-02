@@ -75,6 +75,20 @@ export default function Home() {
     await updateInventory();
   };
 
+  const removeEntireItem = async (item) => {
+    const docRef = doc(collection(firestore, "inventory"), item);
+
+    try {
+      await deleteDoc(docRef);
+
+      console.log(`Entire item '${item}' has been removed from the inventory.`);
+
+      await updateInventory();
+    } catch (error) {
+      console.error("Error removing entire item:", error);
+    }
+  };
+
   const addItem = async (item, quantity) => {
     const docRef = doc(collection(firestore, "inventory"), item);
     const docSnap = await getDoc(docRef);
@@ -259,30 +273,22 @@ export default function Home() {
       <Box
         display="flex"
         flexDirection="row"
-        maxWidth="700px"
+        maxWidth="500px"
         minWidth="400px"
         width="100%"
         height="100px"
-        justifyContent="space-between"
+        justifyContent="center"
       >
         <Stack
           alignItems="center"
           display="flex"
           justifyContent="space-evenly"
-          width="230px"
           flexDirection="row"
+          width="100%"
         >
           <Button variant="contained" onClick={toggleSortMethod}>
             Sort {sortAlphabetically ? "by Alphabetically" : "Quantity"}
           </Button>
-        </Stack>
-        <Stack
-          alignItems="center"
-          display="flex"
-          justifyContent="space-evenly"
-          width="300px"
-          flexDirection="row"
-        >
           <Button
             variant="contained"
             onClick={() => {
@@ -303,7 +309,7 @@ export default function Home() {
       </Box>
       <Box
         border="1px solid black"
-        maxWidth="700px"
+        maxWidth="600px"
         minWidth="400px"
         width="100%"
         height="400px"
@@ -344,7 +350,7 @@ export default function Home() {
               border="1px solid grey"
             >
               <Stack
-                width="45%"
+                width="40%"
                 justifyContent="center"
                 alignItems="left"
                 display="flex"
@@ -367,15 +373,71 @@ export default function Home() {
               <Stack
                 direction="row"
                 spacing={2}
-                width="25%"
+                width="35%"
                 alignItems="center"
                 justifyContent="space-evenly"
                 display="flex"
               >
-                <Button variant="contained" onClick={() => addItem(name, 1)}>
-                  Add
-                </Button>
-                <Button variant="contained" onClick={() => removeItem(name)}>
+                <Stack
+                  width="20px"
+                  alignItems="center"
+                  justifyContent="center"
+                  border="1px solid black"
+                  borderRadius="50%"
+                  sx={{
+                    userSelect: "none",
+
+                    "&:hover": {
+                      backgroundColor: "#ADD8e6",
+                      border: "1px solid #333",
+                    },
+                  }}
+                >
+                  <Typography
+                    variant="contained"
+                    color="#333"
+                    textAlign="center"
+                    onClick={() => removeItem(name)}
+                    sx={{
+                      cursor: "pointer",
+                      userSelect: "none",
+                    }}
+                  >
+                    -
+                  </Typography>
+                </Stack>
+                <Stack
+                  width="20px"
+                  alignItems="center"
+                  justifyContent="center"
+                  border="1px solid black"
+                  borderRadius="50%"
+                  sx={{
+                    userSelect: "none",
+
+                    "&:hover": {
+                      backgroundColor: "#ADD8e6",
+                      border: "1px solid #333",
+                    },
+                  }}
+                >
+                  <Typography
+                    variant="contained"
+                    color="#333"
+                    textAlign="center"
+                    onClick={() => addItem(name, 1)}
+                    sx={{
+                      cursor: "pointer",
+                      userSelect: "none",
+                    }}
+                  >
+                    +
+                  </Typography>
+                </Stack>
+                <Button
+                  variant="contained"
+                  onClick={() => removeEntireItem(name)}
+                >
                   Remove
                 </Button>
               </Stack>
