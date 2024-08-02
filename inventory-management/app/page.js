@@ -1,5 +1,5 @@
 "use client";
-import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { firestore, analytics } from "../firebase";
 import {
@@ -246,6 +246,7 @@ export default function Home() {
           </Button>
         </Box>
       </Modal>
+
       <Modal open={openNoResult} onClose={() => setOpenNoResult(false)}>
         <Box
           position="absolute"
@@ -460,11 +461,6 @@ export default function Home() {
           ))}
         </Stack>
       </Box>
-      <Stack>
-        <Button onClick={() => signOut()} variant="contained">
-          Logout
-        </Button>
-      </Stack>
     </Box>
   );
 }
