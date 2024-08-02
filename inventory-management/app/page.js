@@ -273,8 +273,8 @@ export default function Home() {
       <Box
         display="flex"
         flexDirection="row"
-        maxWidth="500px"
-        minWidth="400px"
+        maxWidth="700px"
+        minWidth="300px"
         width="100%"
         height="100px"
         justifyContent="center"
@@ -296,7 +296,7 @@ export default function Home() {
           width="100%"
         >
           <Button variant="contained" onClick={toggleSortMethod}>
-            Sort {sortAlphabetically ? "by Alphabetically" : "Quantity"}
+            Sort {sortAlphabetically ? "from A to Z" : "Quantity"}
           </Button>
           <Button
             variant="contained"
@@ -324,11 +324,11 @@ export default function Home() {
         height="400px"
         sx={{
           width: {
-            xs: "80%", // 0px to 600px
-            sm: "70%", // 600px to 900px
-            md: "60%", // 900px to 1200px
-            lg: "50%", // 1200px to 1536px
-            xl: "40%", // 1536px and up
+            xs: "40%", // 0px to 600px
+            sm: "80%", // 600px to 900px
+            md: "70%", // 900px to 1200px
+            lg: "60%", // 1200px to 1536px
+            xl: "50%", // 1536px and up
           },
         }}
       >
