@@ -461,7 +461,9 @@ export default function Home() {
         </Stack>
       </Box>
       <Stack>
-        <Button onClick={() => signOut()}>Logout</Button>
+        <Button onClick={() => signOut()} variant="contained">
+          Logout
+        </Button>
       </Stack>
     </Box>
   );

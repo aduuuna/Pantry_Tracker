@@ -1,18 +1,8 @@
-// export default function Login() {
-//   const [error, setError] = useState(null);
-
-//   return (
-//     <div>
-//       <button onClick={handleSignIn}>Login with Google</button>
-//       {error && <p>Error: {error}</p>}
-//     </div>
-//   );
-// }
-
-// Mmmmmm
 "use client";
-import { signIn } from "next-auth/react";
+
 import React, { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import {
   Button,
   TextField,
@@ -25,54 +15,55 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Google, Visibility, VisibilityOff } from "@mui/icons-material";
-import { useRouter } from "next/router";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  //   const router = useRouter();
+  const [error, setError] = useState("");
+  const router = useRouter();
 
   const validateForm = () => {
-    let isValid = true;
     if (!email) {
-      setEmailError("Email is required");
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError("Email is invalid");
-      isValid = false;
-    } else {
-      setEmailError("");
+      setError("Email is required");
+      return false;
+    }
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setError("Email is invalid");
+      return false;
     }
     if (!password) {
-      setPasswordError("Password is required");
-      isValid = false;
-    } else {
-      setPasswordError("");
+      setError("Password is required");
+      return false;
     }
-    return isValid;
+    return true;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateForm()) {
-      // Here you would typically send a request to your authentication API
-      console.log("Login submitted with:", { email, password });
-      // For demonstration, we'll just redirect to a home page
-      router.push("/home");
+      try {
+        const result = await signIn("credentials", {
+          redirect: false,
+          email,
+          password,
+        });
+        if (result.error) {
+          setError(result.error);
+        } else {
+          router.push("/home");
+        }
+      } catch (err) {
+        setError("An error occurred during sign in");
+      }
     }
   };
 
-  const handleSignIn = async () => {
+  const handleGoogleSignIn = async () => {
     try {
-      const result = await signIn("google", { callbackUrl: "/" });
-      if (result?.error) {
-        setError(result.error);
-      }
+      await signIn("google", { callbackUrl: "/home" });
     } catch (err) {
-      setError("An error occurred during sign in");
+      setError("An error occurred during Google sign in");
     }
   };
 
@@ -95,7 +86,12 @@ export default function LoginPage() {
           noValidate
           sx={{ mt: 1, width: "100%" }}
         >
-          <TextField
+          {error && (
+            <Typography color="error" sx={{ mb: 2 }}>
+              {error}
+            </Typography>
+          )}
+          {/* <TextField
             margin="normal"
             required
             fullWidth
@@ -106,8 +102,6 @@ export default function LoginPage() {
             autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            error={!!emailError}
-            helperText={emailError}
           />
           <TextField
             margin="normal"
@@ -120,8 +114,6 @@ export default function LoginPage() {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            error={!!passwordError}
-            helperText={passwordError}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -130,33 +122,35 @@ export default function LoginPage() {
                     onClick={() => setShowPassword(!showPassword)}
                     edge="end"
                   >
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
             }}
-          />
-          <Button
+          /> */}
+          {/* <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
             Sign In
-          </Button>
-          <Divider sx={{ my: 2 }}>OR</Divider>
+          </Button> */}
+          {/* <Divider sx={{ my: 2 }}>OR</Divider> */}
           <Button
             fullWidth
             variant="outlined"
             startIcon={<Google />}
-            onClick={handleSignIn}
+            onClick={handleGoogleSignIn}
             sx={{ mb: 2 }}
           >
             Sign in with Google
           </Button>
-          <Link href="/signup" variant="body2">
-            {"Don't have an account? Sign Up"}
-          </Link>
+          {/* <Link href="/signup" passHref legacyBehavior>
+            <Typography component="a" variant="body2">
+              {"Don't have an account? Sign Up"}
+            </Typography>
+          </Link> */}
         </Box>
       </Box>
     </Container>

@@ -4,8 +4,6 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import SessionProvider from "./SessionProvider";
 import Login from "./Login";
-import Home from "./page";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export default async function RootLayout({ children }) {
