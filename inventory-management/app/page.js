@@ -296,7 +296,7 @@ export default function Home() {
           width="100%"
         >
           <Button variant="contained" onClick={toggleSortMethod}>
-            Sort {sortAlphabetically ? "from A to Z" : "Quantity"}
+            Sort {sortAlphabetically ? "A-Z" : "Qty ↑"}
           </Button>
           <Button
             variant="contained"
@@ -304,7 +304,7 @@ export default function Home() {
               handleOpen();
             }}
           >
-            Add new Item
+            Add Items
           </Button>
           <Button
             variant="contained"
@@ -321,7 +321,7 @@ export default function Home() {
         maxWidth="600px"
         minWidth="400px"
         width="100%"
-        height="400px"
+        height="500px"
         sx={{
           width: {
             xs: "40%", // 0px to 600px
@@ -347,7 +347,7 @@ export default function Home() {
 
         <Stack
           width="100%"
-          height="300px"
+          height="400px"
           spacing={1}
           overflow="auto"
           ref={inventoryListRef}
