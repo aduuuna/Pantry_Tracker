@@ -321,7 +321,7 @@ export default function Home() {
         maxWidth="600px"
         minWidth="400px"
         width="100%"
-        height="500px"
+        height="400px"
         sx={{
           width: {
             xs: "40%", // 0px to 600px
@@ -347,7 +347,7 @@ export default function Home() {
 
         <Stack
           width="100%"
-          height="400px"
+          height="300px"
           spacing={1}
           overflow="auto"
           ref={inventoryListRef}
@@ -359,7 +359,7 @@ export default function Home() {
               height="80px"
               bgcolor={highlightedItem === name ? "#FFB6C1" : "#e1f0f5"}
               alignItems="center"
-              justifyContent="space-between"
+              justifyContent="space-evenly"
               flexDirection="row"
               display="flex"
               padding={3}
